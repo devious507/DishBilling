@@ -15,6 +15,7 @@ while(getCount($conn,$sql) == 0) {
 	}
 	$addr=implode(" ",$Taddr);
 	$sql=getSQL($addr);
+	//print $sql; exit();
 }
 $rows=getRows($conn,$sql);
 
@@ -40,9 +41,16 @@ function getCount($conn,$sql) {
 	return $count;
 }
 function getSQL($addr) {
+	if(preg_match("/MARTIN LUTHER KING/",$addr)) {
+		$addr2=preg_replace("/MARTIN LUTHER/","ML",$addr);
+	}
 	$sql="SELECT * FROM wincable_data WHERE address2 like '{$addr}%'";
 	$sql="SELECT distinct a.subname,a.gr_address,address1,address2,address3 FROM (select subname,address2||' '||address1 as gr_address,address1||' '||address2 as bckwards,address1,address2,address3 FROM wincable_data) AS a";
-	$sql.=" WHERE gr_address LIKE '{$addr}%' OR bckwards like '{$addr}%' ORDER BY subname";
+	$sql.=" WHERE gr_address LIKE '{$addr}%' OR bckwards like '{$addr}%'";
+	if(isset($addr2)) {
+		$sql.=" OR gr_address LIKE '{$addr2}%' OR bckwards like '{$addr2}%'";
+	}
+        $sql.="	ORDER BY subname";
 	return $sql;
 }
 function getRow($row) {

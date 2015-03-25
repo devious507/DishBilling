@@ -15,7 +15,9 @@ while(($row = fgetcsv($handle,1000,",")) !== FALSE) {
 		$right=array();
 		$left=array('subname','address1','category_name','dates','description','quantity','unit_price','amount');
 		$right[]=strtoupper($row[24]);				// subname
-		$right[]=strtoupper($row[25]);				// address1
+		//$right[]=strtoupper($row[25]);				// address1
+		// Added code to strip # symbols on 3/25/2015
+		$right[]=preg_replace("/#/","",strtoupper($row[25]));	// address1
 		$right[]=$row[30];					// category_name
 		$right[]=$row[31];					// dates
 		$right[]=preg_replace("/'/","''",$row[32]);		// description
